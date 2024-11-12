@@ -1,0 +1,70 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.7.18'
+	id 'java'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.insight'
+sourceCompatibility = '17'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', '2021.0.8')
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+	}
+}
+
+springBoot {
+	mainClass = 'com.insight.grain.Application'
+}
+
+dependencies {
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.springframework.boot:spring-boot-starter-undertow')
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation("org.springframework.boot:spring-boot-starter-data-rest")
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	compileOnly('org.projectlombok:lombok:1.18.26')
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
+	implementation 'commons-validator:commons-validator:1.7'
+	implementation 'co.omise:omise-java:4.0.6'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+configurations {
+  compile.exclude module: 'spring-boot-starter-tomcat'
+  compile.exclude group: 'org.apache.tomcat'
+}
+
+archivesBaseName = 'main'
